@@ -25,19 +25,12 @@ export class LoginComponent {
               private loginService: LoginService,
               private router: Router ) {}
 
-  onLogin(): void {
-    const success = this.authService.login(this.username, this.password);
-    if (!success) {
-      this.errorMessage = 'Nome de usuário ou senha inválidos.';
-    }
-  }
-
   login(){
     this.loginService.login(this.username, this.password).subscribe({
       next:(response: any) => {
-        this.router.navigate(['/dashboard']);
-        this.loginService.saveToken(response.token); // Armazena as credenciais
+        this.loginService.saveToken(response); // Armazena as credenciais
         localStorage.setItem('authStatus', JSON.stringify(true));
+        this.router.navigate(['/profile']);
     }, error: (err) => {
         alert("Usuario e senha invalido")
       }

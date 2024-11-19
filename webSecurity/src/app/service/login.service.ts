@@ -13,7 +13,7 @@ export class LoginService {
 
 
   login(username: string, password: string): Observable<string> {
-    return this.http.post(this.url + "/authenticate", { username, password }, { responseType: 'text' });
+    return this.http.post<string>(this.url + "/authenticate", { username, password }, { responseType: 'text' as 'json' });
   }
 
   // Método para salvar o token
@@ -25,4 +25,5 @@ export class LoginService {
   getToken(): string | null {
     return localStorage.getItem('token');
   }
+
 }

@@ -8,6 +8,7 @@ import {UserComponent} from "./page/user/user.component";
 import {authGuard} from "./guard/auth.guard";
 import {adminGuard} from "./guard/admin.guard";
 import {RegisterComponent} from "./page/register/register.component";
+import {UserListComponent} from "./page/user-list/user-list.component";
 
 export const routes: Routes = [
   {path: '', redirectTo: 'home', pathMatch: 'full'},
@@ -18,4 +19,5 @@ export const routes: Routes = [
   {path: 'profile', component: ProfileComponent, canActivate: [authGuard]},
   {path: 'user', component: UserComponent, canActivate: [authGuard]},
   {path: 'register', component: RegisterComponent},
+  {path: 'user-list', component: UserListComponent, canActivate: [adminGuard]},
 ];

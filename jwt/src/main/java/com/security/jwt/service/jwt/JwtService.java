@@ -2,9 +2,7 @@ package com.security.jwt.service.jwt;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.oauth2.jwt.JwtClaimsSet;
-import org.springframework.security.oauth2.jwt.JwtEncoder;
-import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
+import org.springframework.security.oauth2.jwt.*;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -14,9 +12,11 @@ import java.util.stream.Collectors;
 public class JwtService {
 
     private final JwtEncoder encoder;
+    private final JwtDecoder decoder; // Adicionado JwtDecoder
 
-    public JwtService(JwtEncoder encoder) {
+    public JwtService(JwtEncoder encoder, JwtDecoder decoder) {
         this.encoder = encoder;
+        this.decoder = decoder;
     }
 
     public String generateToken(Authentication authentication) {
@@ -37,5 +37,9 @@ public class JwtService {
                 .build();
 
         return encoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
+    }
+
+    public Jwt decodeToken(String token) {
+        return decoder.decode(token); // Decodifica e valida o token
     }
 }

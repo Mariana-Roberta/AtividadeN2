@@ -1,5 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Router} from "@angular/router";
+import jwtDecode from 'jwt-decode';
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 
 @Injectable({
   providedIn: 'root'
@@ -9,22 +11,7 @@ export class AuthServiceService {
   isAutenticado: boolean = this.getAuthStatus();
   isAdmin: boolean = this.getAdminStatus();
 
-  constructor(private router: Router) {
-  }
-
-  login(username: string, password: string) {
-    if (username && password) {
-      if (username === 'admin' && password === 'admin') {
-        this.setAuthState(true, true)
-        this.router.navigate(['/dashboard']);
-        return true;
-      } else if (username === 'user' && password === 'user') {
-        this.setAuthState(true, false)
-        this.router.navigate(['/dashboard']);
-        return true;
-      }
-    }
-    return false;
+  constructor(private router: Router, private http: HttpClient) {
   }
 
   logout(): void {
@@ -33,7 +20,7 @@ export class AuthServiceService {
     this.router.navigate(['/']);
   }
 
-  private setAuthState(authStatus: boolean, adminStatus: boolean): void {
+  public setAuthState(authStatus: boolean, adminStatus: boolean): void {
     this.isAutenticado = authStatus;
     this.isAdmin = adminStatus;
     localStorage.setItem('authStatus', JSON.stringify(authStatus));
@@ -44,7 +31,17 @@ export class AuthServiceService {
     return JSON.parse(localStorage.getItem('authStatus') || 'false');
   }
 
-  private getAdminStatus(): boolean {
+  getAdminStatus(): boolean {
     return JSON.parse(localStorage.getItem('adminStatus') || 'false');
+  }
+
+  getUserDetails() {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`, // Envia o token no cabeçalho
+    });
+
+    // Faz a chamada ao backend para obter os detalhes do usuário
+    return this.http.get('http://localhost:8080/user/profile', { headers });
   }
 }

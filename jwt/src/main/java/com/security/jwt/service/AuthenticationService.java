@@ -24,6 +24,7 @@ public class AuthenticationService {
 
         return jwtService.generateToken(authentication);
     }
+
 }
 
 /*package com.security.jwt.service;
